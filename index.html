@@ -82,9 +82,7 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
 </style>
 </head>
 <body>
-
 <div id="splash"><video autoplay muted loop playsinline src="animasi.mp4"></video><button id="lewati" onclick="goLogin()">LEWATI →</button></div>
-
 <div id="loginPage">
   <video class="bgVideo" autoplay muted loop playsinline src="animasi.mp4"></video>
   <div class="scrim"></div>
@@ -92,49 +90,41 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
     <div class="mono" style="font-size:11px;letter-spacing:1px">PRIVATE • KHUSUS DELZ • LOCALSTORAGE ON</div>
     <h1>DELZ<br><span>PROJECT</span></h1>
     <p style="font-size:13px;color:#6B675E;margin-top:6px;line-height:1.5">List project lu. Kesimpen di HP lu, bukan di server. Tutup app, buka lagi tetep ada.</p>
-    <input id="pin" class="input" type="password" placeholder="PIN lu" maxlength="4">
+    <input id="pin" class="input" type="tel" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" placeholder="PIN lu (6 angka)" maxlength="6">
     <button class="btn" onclick="login()">MASUK →</button>
-    <p class="mono" style="font-size:11px;color:#6B675E;margin-top:8px">PIN default 1234. Bisa diganti di menu bawah.</p>
+    <p class="mono" style="font-size:11px;color:#6B675E;margin-top:8px">PIN 6 angka. Bisa diganti di menu bawah.</p>
   </div>
 </div>
-
 <div id="homePage">
   <div class="top"><div><b style="font-size:22px;letter-spacing:-1px">DELZ PROJECT</b><div class="mono" style="font-size:11px;color:#6B675E" id="dateTxt"></div></div><div class="mono" style="font-size:11px;border:2px solid #000;padding:6px 8px;background:#FF4D00;color:#fff">● <span id="saveDot">SAVED</span></div></div>
-
   <div class="banner">
     <div class="bannerTag mono">DELZ PROJECT</div>
     <video id="bannerVideo" autoplay muted loop playsinline src="banner.mp4" onerror="document.getElementById('noBanner').style.display='grid'"></video>
     <div class="noBanner" id="noBanner" style="display:none"><div>🎬 BANNER.MP4 BELUM ADA<br><small>Taro file banner.mp4 di folder yang sama</small></div></div>
     <div class="bannerBottom"><div><b>SEDANG DIPROSES HARI INI</b><br><span class="mono" id="bannerSub">0 project jalan</span></div><span class="mono">▶ LOOP</span></div>
   </div>
-
   <div class="stats">
     <div class="stat"><b id="nTotal">0</b><span class="mono">TOTAL</span></div>
     <div class="stat"><b id="nDoing">0</b><span class="mono">DIBIKIN</span></div>
     <div class="stat"><b id="nDone">0</b><span class="mono">SELESAI</span></div>
   </div>
-
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
     <button class="chip" data-filter="ALL" onclick="setFilter('ALL',this)">SEMUA</button>
     <button class="chip" data-filter="APK" onclick="setFilter('APK',this)">APK</button>
     <button class="chip" data-filter="WEB" onclick="setFilter('WEB',this)">WEB</button>
     <button class="chip" data-filter="DOING" onclick="setFilter('DOING',this)">LAGI PROSES</button>
   </div>
-
   <div class="viewToggle">
     <button class="chip" id="btnCard" onclick="setView('CARD')">◧ KARTU</button>
     <button class="chip" id="btnTable" onclick="setView('TABLE')">▦ TABEL</button>
   </div>
-
   <div id="loading" style="display:none"><div class="skel"></div><div class="skel" style="margin-top:10px"></div></div>
-
   <div id="viewCard">
     <h2 style="margin:12px 0 10px"> SEDANG <span style="color:#FF4D00">DIPROSES</span></h2>
     <div id="listDoing"></div>
     <h2 style="margin:16px 0 10px">IDE & ANTRIAN</h2>
     <div id="listRest"></div>
   </div>
-
   <div id="viewTable" style="display:none">
     <h2 style="margin:12px 0 10px">▦ SEMUA PROJECT - TABEL</h2>
     <div class="tableWrap">
@@ -145,7 +135,6 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
     </div>
     <p class="mono" style="font-size:11px;color:#6B675E">Geser tabel ke kanan kalo kepotong di HP.</p>
   </div>
-
   <div class="storageBox">
     <b>💾 LOCALSTORAGE - DATA LU AMAN DI HP</b>
     <p id="storageInfo">Menghitung...</p>
@@ -156,12 +145,10 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
       <button class="mini" style="background:#000;color:#fff" onclick="resetAll()">🗑 RESET SEMUA</button>
     </div>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-    <p class="mono" style="margin-top:8px">PIN sekarang: <span id="pinShow">****</span> • View terakhir kesimpen otomatis</p>
+    <p class="mono" style="margin-top:8px">PIN sekarang: <span id="pinShow">******</span> • View terakhir kesimpen otomatis</p>
   </div>
 </div>
-
 <div class="nav" id="nav" style="display:none"><button class="on" onclick="window.scrollTo({top:0,behavior:'smooth'})">◧ HOME</button><button onclick="openModal()">+ TAMBAH</button><button onclick="location.reload()">↻ RELOAD</button></div>
-
 <div class="overlay" id="overlay"><div class="modal">
   <div style="display:flex;justify-content:space-between"><b>PROJECT BARU</b><button class="mini" onclick="closeModal()">✕</button></div>
   <input id="fNama" class="input" placeholder="Nama project">
@@ -172,13 +159,17 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
   <button class="btn" style="background:#FF4D00" onclick="addProject()">SIMPAN PROJECT →</button>
   <p class="mono" style="font-size:11px;color:#6B675E;margin-top:8px">Pencet SIMPAN = langsung kesimpen ke LocalStorage HP lu.</p>
 </div></div>
-
 <script>
 const LS_PROJECTS = 'delz_projects';
 const LS_PIN = 'delz_pin';
 const LS_VIEW = 'delz_view';
 const LS_FILTER = 'delz_filter';
-function getPin(){ return localStorage.getItem(LS_PIN) || '1234'; }
+const DEFAULT_PIN = '112505';
+function getPin(){
+  let p = localStorage.getItem(LS_PIN);
+  if(!p){ localStorage.setItem(LS_PIN, DEFAULT_PIN); return DEFAULT_PIN; }
+  return p;
+}
 function getProjects(){ try{ return JSON.parse(localStorage.getItem(LS_PROJECTS) || '[]'); }catch(e){ return []; } }
 function saveProjects(){
   localStorage.setItem(LS_PROJECTS, JSON.stringify(projects));
@@ -203,20 +194,31 @@ function updateStorageInfo(){
   let total = JSON.stringify(localStorage).length;
   let kb = (total/1024).toFixed(1);
   document.getElementById('storageInfo').innerText = projects.length + ' project kesimpen • ' + kb + ' KB di LocalStorage • Tutup app / reload tetep ada. Data cuma di HP lu, bukan di server.';
-  document.getElementById('pinShow').innerText = getPin();
+  document.getElementById('pinShow').innerText = '*'.repeat(getPin().length);
 }
 function goLogin() { document.getElementById('splash').style.display = 'none'; document.getElementById('loginPage').style.display = 'flex'; }
 function login() {
   let p = document.getElementById('pin');
-  if (p.value == '' || p.value == getPin()) {
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('homePage').style.display = 'block';
-    document.getElementById('nav').style.display = 'flex';
-    document.getElementById('dateTxt').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-    applySavedViewFilter();
-    render(true);
-  } else { p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake'); }
+  let pin = p.value.trim().replace(/[^0-9]/g,'');
+  if (pin === '') {
+    alert("Masukin PIN dulu jing!");
+    p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake'); p.focus(); return;
+  }
+  if (pin !== getPin()) {
+    alert("PIN salah jing!");
+    p.value = "";
+    p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake'); p.focus(); return;
+  }
+  p.value = "";
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('homePage').style.display = 'block';
+  document.getElementById('nav').style.display = 'flex';
+  document.getElementById('dateTxt').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  applySavedViewFilter();
+  render(true);
 }
+document.getElementById('pin').addEventListener('input', function(){ this.value = this.value.replace(/[^0-9]/g,'').slice(0,6); });
+document.getElementById('pin').addEventListener('keydown', function(e){ if(e.key === 'Enter') login(); });
 function applySavedViewFilter(){
   document.querySelectorAll('[data-filter]').forEach(c=>c.classList.toggle('on', c.dataset.filter===filter));
   document.getElementById('btnCard').classList.toggle('on', view==='CARD');
@@ -253,9 +255,9 @@ function importData(e){
   r.readAsText(f);
 }
 function changePin(){
-  let baru = prompt('PIN baru (4 angka):', getPin());
-  if(!baru) return; baru = baru.trim();
-  if(baru.length < 3){ alert('PIN kependekan'); return; }
+  let baru = prompt('PIN baru (6 angka):', getPin());
+  if(!baru) return; baru = baru.trim().replace(/[^0-9]/g,'');
+  if(baru.length !== 6){ alert('PIN harus 6 angka jing!'); return; }
   localStorage.setItem(LS_PIN, baru); updateStorageInfo(); alert('PIN baru kesimpen: ' + baru + '. Inget-inget!');
 }
 function resetAll(){
@@ -288,7 +290,6 @@ function card(i, p, hot) {
   return `<div class="card ${hot ? 'hot' : ''}"><div style="display:flex;justify-content:space-between"><span class="mono" style="font-size:11px;border:1px solid #000;padding:3px 6px;background:#F2EEE3">${p.jenis} • ${p.status}</span><button class="mini" onclick="del(${i})">HAPUS</button></div><h3 style="margin:8px 0 4px">${p.nama}</h3><p style="font-size:13px;color:#6B675E">${p.note || ''}</p><div class="progress"><i style="width:${p.prog}%"></i></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="mono" style="font-size:12px;font-weight:600">${p.prog}%</span>${p.status != 'DONE' ? `<button class="mini fill" onclick="finish(${i})">SELESAI ✓</button>` : ''}</div></div>`;
 }
 </script>
-<!-- FIX INSTAL DOANG - JANGAN DIHAPUS -->
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js')}</script>
 </body>
-      </html>
+</html>
