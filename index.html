@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DELZ PROJECT</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F2EEE3">
+<meta name="mobile-web-app-capable" content="yes">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F2EEE3;color:#191813;font-family:'Space Grotesk',sans-serif}
+.mono{font-family:'IBM Plex Mono',monospace}
+#splash{position:fixed;inset:0;z-index:100;background:#000}
+#splash video{width:100%;height:100%;object-fit:cover}
+#lewati{position:absolute;right:12px;bottom:14px;background:#fff;color:#000;border:2px solid #000;padding:7px 10px;font-size:12px;font-weight:700;box-shadow:2px 2px 0 #FF4D00;cursor:pointer;line-height:1}
+#lewati:active{transform:translate(1px,1px);box-shadow:0 0 0 #FF4D00}
+#loginPage{min-height:100vh;position:relative;overflow:hidden;display:none;flex-direction:column;justify-content:flex-end}
+#loginPage video.bgVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+#loginPage .scrim{position:absolute;inset:0;background:linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.35) 45%, rgba(0,0,0,.15) 100%);z-index:1}
+.loginCard{position:relative;z-index:2;background:#F2EEE3;border-top:4px solid #FF4D00;padding:20px 18px 22px}
+.loginCard h1{font-size:42px;line-height:.9;letter-spacing:-2px}
+.loginCard h1 span{color:#FF4D00}
+.input{width:100%;background:#fff;border:2px solid #000;padding:14px;margin-top:14px;font-size:16px;font-family:'IBM Plex Mono',monospace;outline:none}
+.input:focus{box-shadow:4px 4px 0 #FF4D00}
+.btn{position:relative;overflow:hidden;width:100%;background:#191813;color:#fff;border:2px solid #000;padding:15px;margin-top:12px;font-weight:700;box-shadow:4px 4px 0 #FF4D00;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.btn:active{transform:translate(2px,2px) scale(.98);box-shadow:0 0 0 #FF4D00}
+.btn::after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .5s}
+.btn:active::after{left:120%}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.shake{animation:shake .4s;border-color:#FF4D00!important}
+#homePage{display:none;max-width:520px;margin:0 auto;padding:14px 14px 90px}
+.top{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #000;padding:6px 0 12px}
+.banner{position:relative;width:100%;aspect-ratio:16/8;border:2px solid #000;background:#000;box-shadow:4px 4px 0 #000;margin:12px 0 4px;overflow:hidden}
+.banner video{width:100%;height:100%;object-fit:cover;display:block}
+.banner .bannerTag{position:absolute;left:8px;top:8px;background:#FF4D00;color:#fff;font-size:10px;padding:4px 7px;letter-spacing:1px;z-index:2}
+.banner .bannerBottom{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:linear-gradient(to top,rgba(0,0,0,.7),transparent);color:#fff;z-index:2}
+.banner .bannerBottom b{font-size:13px}
+.banner .bannerBottom span{font-size:10px;opacity:.85}
+.banner .noBanner{position:absolute;inset:0;display:grid;place-items:center;color:#fff;text-align:center;font-size:12px;line-height:1.5;z-index:1}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+.stat{background:#FFFDF7;border:2px solid #000;padding:12px;box-shadow:3px 3px 0 #000}
+.stat b{font-size:26px;display:block;line-height:1}
+.stat span{font-size:10px;letter-spacing:1px;color:#6B675E}
+.chip{border:2px solid #000;background:#fff;padding:8px 10px;font-weight:700;font-size:12px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.chip:active{transform:scale(.94)}
+.chip.on{background:#191813;color:#fff;box-shadow:2px 2px 0 #FF4D00}
+.mini{border:2px solid #000;background:#fff;padding:7px 10px;font-weight:700;font-size:12px;cursor:pointer;transition:transform .12s}
+.mini:active{transform:scale(.92)}
+.mini.fill{background:#FF4D00;color:#fff;box-shadow:2px 2px 0 #000}
+.mini.fill:active{box-shadow:0 0 0 #000;transform:translate(1px,1px) scale(.95)}
+.card{background:#FFFDF7;border:2px solid #000;box-shadow:4px 4px 0 #000;padding:14px;margin-bottom:12px;transition:transform .15s,box-shadow .15s}
+.card:active{transform:translate(2px,2px) scale(.99);box-shadow:1px 1px 0 #000}
+.card.hot{border-color:#FF4D00}
+.progress{height:10px;border:2px solid #000;background:#eee;margin:10px 0;overflow:hidden}
+.progress i{display:block;height:100%;background:#FF4D00;transition:width .4s}
+.viewToggle{display:flex;gap:8px;margin:10px 0}
+.viewToggle button{flex:1}
+.tableWrap{border:2px solid #000;background:#FFFDF7;box-shadow:4px 4px 0 #000;overflow-x:auto;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:460px}
+thead th{background:#191813;color:#fff;text-align:left;padding:10px 8px;font-size:11px;letter-spacing:.5px;white-space:nowrap}
+tbody td{padding:10px 8px;border-bottom:1px solid #E8E2D5;vertical-align:middle}
+tbody tr:active{background:#FFF0E6}
+td .pbar{width:70px;height:8px;border:1px solid #000;background:#eee;display:inline-block;vertical-align:middle}
+td .pbar i{display:block;height:100%;background:#FF4D00}
+.statusPill{display:inline-block;font-size:10px;font-weight:700;padding:3px 6px;border:1px solid #000;background:#F2EEE3}
+.statusPill.doing{background:#FF4D00;color:#fff}
+.statusPill.done{background:#191813;color:#fff}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;background:#191813;display:flex;z-index:40;border-top:2px solid #000}
+.nav button{flex:1;background:none;border:none;color:#fff;padding:14px;font-weight:700;cursor:pointer}
+.nav button:active{transform:scale(.96);background:#2A2723}
+.nav button.on{color:#FF4D00}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;align-items:flex-end;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:#F2EEE3;width:100%;max-width:520px;border:2px solid #000;border-top:6px solid #FF4D00;padding:16px;max-height:90vh;overflow:auto}
+.skel{height:96px;border:2px dashed #000;background:linear-gradient(90deg,#eee 25%,#fff 50%,#eee 75%);background-size:200% 100%;animation:shimmer 1.1s infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+.storageBox{border:2px dashed #000;padding:12px;margin-top:16px;background:#FFFDF7}
+.storageBox b{font-size:13px}
+.storageBox p{font-size:11px;color:#6B675E;line-height:1.5;margin:4px 0 8px}
+</style>
+</head>
+<body>
+
+<div id="splash"><video autoplay muted loop playsinline src="animasi.mp4"></video><button id="lewati" onclick="goLogin()">LEWATI →</button></div>
+
+<div id="loginPage">
+  <video class="bgVideo" autoplay muted loop playsinline src="animasi.mp4"></video>
+  <div class="scrim"></div>
+  <div class="loginCard">
+    <div class="mono" style="font-size:11px;letter-spacing:1px">PRIVATE • KHUSUS DELZ • LOCALSTORAGE ON</div>
+    <h1>DELZ<br><span>PROJECT</span></h1>
+    <p style="font-size:13px;color:#6B675E;margin-top:6px;line-height:1.5">List project lu. Kesimpen di HP lu, bukan di server. Tutup app, buka lagi tetep ada.</p>
+    <input id="pin" class="input" type="password" placeholder="PIN lu" maxlength="4">
+    <button class="btn" onclick="login()">MASUK →</button>
+    <p class="mono" style="font-size:11px;color:#6B675E;margin-top:8px">PIN default 1234. Bisa diganti di menu bawah.</p>
+  </div>
+</div>
+
+<div id="homePage">
+  <div class="top"><div><b style="font-size:22px;letter-spacing:-1px">DELZ•PROJECT</b><div class="mono" style="font-size:11px;color:#6B675E" id="dateTxt"></div></div><div class="mono" style="font-size:11px;border:2px solid #000;padding:6px 8px;background:#FF4D00;color:#fff">● <span id="saveDot">SAVED</span></div></div>
+
+  <div class="banner">
+    <div class="bannerTag mono">DELZ • BANNER</div>
+    <video id="bannerVideo" autoplay muted loop playsinline src="banner.mp4" onerror="document.getElementById('noBanner').style.display='grid'"></video>
+    <div class="noBanner" id="noBanner" style="display:none"><div>🎬 BANNER.MP4 BELUM ADA<br><small>Taro file banner.mp4 di folder yang sama</small></div></div>
+    <div class="bannerBottom"><div><b>SEDANG DIBIKIN HARI INI</b><br><span class="mono" id="bannerSub">0 project jalan</span></div><span class="mono">▶ LOOP</span></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="nTotal">0</b><span class="mono">TOTAL</span></div>
+    <div class="stat"><b id="nDoing">0</b><span class="mono">DIBIKIN</span></div>
+    <div class="stat"><b id="nDone">0</b><span class="mono">SELESAI</span></div>
+  </div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+    <button class="chip" data-filter="ALL" onclick="setFilter('ALL',this)">SEMUA</button>
+    <button class="chip" data-filter="APK" onclick="setFilter('APK',this)">APK</button>
+    <button class="chip" data-filter="WEB" onclick="setFilter('WEB',this)">WEB</button>
+    <button class="chip" data-filter="DOING" onclick="setFilter('DOING',this)">LAGI BIKIN</button>
+  </div>
+
+  <div class="viewToggle">
+    <button class="chip" id="btnCard" onclick="setView('CARD')">◧ KARTU</button>
+    <button class="chip" id="btnTable" onclick="setView('TABLE')">▦ TABEL</button>
+  </div>
+
+  <div id="loading" style="display:none"><div class="skel"></div><div class="skel" style="margin-top:10px"></div></div>
+
+  <div id="viewCard">
+    <h2 style="margin:12px 0 10px">🔥 SEDANG <span style="color:#FF4D00">DIBIKIN</span></h2>
+    <div id="listDoing"></div>
+    <h2 style="margin:16px 0 10px">IDE & ANTRIAN</h2>
+    <div id="listRest"></div>
+  </div>
+
+  <div id="viewTable" style="display:none">
+    <h2 style="margin:12px 0 10px">▦ SEMUA PROJECT - TABEL</h2>
+    <div class="tableWrap">
+      <table>
+        <thead><tr><th>PROJECT</th><th>JENIS</th><th>STATUS</th><th>PROGRESS</th><th>AKSI</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <p class="mono" style="font-size:11px;color:#6B675E">Geser tabel ke kanan kalo kepotong di HP.</p>
+  </div>
+
+  <!-- LOCALSTORAGE BOX -->
+  <div class="storageBox">
+    <b>💾 LOCALSTORAGE - DATA LU AMAN DI HP</b>
+    <p id="storageInfo">Menghitung...</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="mini fill" onclick="exportData()">⬇ EXPORT BACKUP</button>
+      <button class="mini" onclick="document.getElementById('importFile').click()">⬆ IMPORT</button>
+      <button class="mini" onclick="changePin()">🔑 GANTI PIN</button>
+      <button class="mini" style="background:#000;color:#fff" onclick="resetAll()">🗑 RESET SEMUA</button>
+    </div>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    <p class="mono" style="margin-top:8px">PIN sekarang: <span id="pinShow">****</span> • View terakhir kesimpen otomatis</p>
+  </div>
+</div>
+
+<div class="nav" id="nav" style="display:none"><button class="on" onclick="window.scrollTo({top:0,behavior:'smooth'})">◧ HOME</button><button onclick="openModal()">+ TAMBAH</button><button onclick="location.reload()">↻ RELOAD</button></div>
+
+<div class="overlay" id="overlay"><div class="modal">
+  <div style="display:flex;justify-content:space-between"><b>PROJECT BARU</b><button class="mini" onclick="closeModal()">✕</button></div>
+  <input id="fNama" class="input" placeholder="Nama project">
+  <div style="display:flex;gap:8px"><select id="fJenis" class="input"><option>APK</option><option>WEB</option><option>PWA</option><option>GAME</option></select><select id="fStatus" class="input"><option value="DOING">SEDANG DIBIKIN</option><option value="IDE">IDE / NANTI</option><option value="DONE">SELESAI</option><option value="TUNDA">TUNDA</option></select></div>
+  <input id="fNote" class="input" placeholder="Catatan singkat">
+  <label class="mono" style="font-size:11px;display:block;margin-top:10px">PROGRESS: <span id="progTxt">0%</span></label>
+  <input type="range" id="fProg" min="0" max="100" value="0" style="width:100%" oninput="document.getElementById('progTxt').innerText=this.value+'%'">
+  <button class="btn" style="background:#FF4D00" onclick="addProject()">SIMPAN PROJECT →</button>
+  <p class="mono" style="font-size:11px;color:#6B675E;margin-top:8px">Pencet SIMPAN = langsung kesimpen ke LocalStorage HP lu.</p>
+</div></div>
+
+<script>
+// ===== LOCALSTORAGE - SEMUA DISINI =====
+const LS_PROJECTS = 'delz_projects';
+const LS_PIN = 'delz_pin';
+const LS_VIEW = 'delz_view';
+const LS_FILTER = 'delz_filter';
+
+function getPin(){ return localStorage.getItem(LS_PIN) || '1234'; }
+function getProjects(){ try{ return JSON.parse(localStorage.getItem(LS_PROJECTS) || '[]'); }catch(e){ return []; } }
+function saveProjects(){
+  localStorage.setItem(LS_PROJECTS, JSON.stringify(projects));
+  // indikator SAVED
+  let dot = document.getElementById('saveDot');
+  if(dot){ dot.innerText='SAVED ✓'; setTimeout(()=>{ dot.innerText='SAVED'; }, 1200); }
+  updateStorageInfo();
+}
+function saveView(){ localStorage.setItem(LS_VIEW, view); }
+function saveFilter(){ localStorage.setItem(LS_FILTER, filter); }
+
+let projects = getProjects();
+if (projects.length == 0) {
+  projects = [
+    { nama: 'APK Musik Pribadi', jenis: 'APK', status: 'DOING', note: 'Player + animasi.mp4 loop', prog: 45 },
+    { nama: 'Web Portofolio Delz', jenis: 'WEB', status: 'IDE', note: 'Buat pamer project', prog: 0 },
+    { nama: 'DELZ PROJECT', jenis: 'PWA', status: 'DONE', note: 'Udah jadi v1', prog: 100 }
+  ];
+  saveProjects();
+}
+let filter = localStorage.getItem(LS_FILTER) || 'ALL';
+let view = localStorage.getItem(LS_VIEW) || 'CARD';
+
+function updateStorageInfo(){
+  let total = JSON.stringify(localStorage).length;
+  let kb = (total/1024).toFixed(1);
+  document.getElementById('storageInfo').innerText = projects.length + ' project kesimpen • ' + kb + ' KB di LocalStorage • Tutup app / reload tetep ada. Data cuma di HP lu, bukan di server.';
+  document.getElementById('pinShow').innerText = getPin();
+}
+function goLogin() { document.getElementById('splash').style.display = 'none'; document.getElementById('loginPage').style.display = 'flex'; }
+function login() {
+  let p = document.getElementById('pin');
+  if (p.value == '' || p.value == getPin()) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('homePage').style.display = 'block';
+    document.getElementById('nav').style.display = 'flex';
+    document.getElementById('dateTxt').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    // balikin view & filter terakhir dari localStorage
+    applySavedViewFilter();
+    render(true);
+  } else { p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake'); }
+}
+function applySavedViewFilter(){
+  document.querySelectorAll('[data-filter]').forEach(c=>c.classList.toggle('on', c.dataset.filter===filter));
+  document.getElementById('btnCard').classList.toggle('on', view==='CARD');
+  document.getElementById('btnTable').classList.toggle('on', view==='TABLE');
+  document.getElementById('viewCard').style.display = view==='CARD'?'block':'none';
+  document.getElementById('viewTable').style.display = view==='TABLE'?'block':'none';
+}
+function setFilter(f, el) {
+  filter = f; saveFilter();
+  document.querySelectorAll('[data-filter]').forEach(c=>c.classList.remove('on'));
+  if(el) el.classList.add('on');
+  render();
+}
+function setView(v){ view=v; saveView(); applySavedViewFilter(); render(); }
+function openModal() { document.getElementById('overlay').classList.add('open'); }
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+function addProject() {
+  let n = document.getElementById('fNama').value.trim();
+  if (!n) { let inp = document.getElementById('fNama'); inp.classList.add('shake'); setTimeout(() => inp.classList.remove('shake'), 500); return; }
+  projects.unshift({ nama: n, jenis: document.getElementById('fJenis').value, status: document.getElementById('fStatus').value, note: document.getElementById('fNote').value, prog: +document.getElementById('fProg').value });
+  saveProjects(); closeModal(); render(); document.getElementById('fNama').value = ''; document.getElementById('fNote').value = '';
+}
+function finish(i) { projects[i].status = 'DONE'; projects[i].prog = 100; saveProjects(); render(); }
+function del(i) { if(!confirm('Hapus project ini?')) return; projects.splice(i, 1); saveProjects(); render(); }
+
+// ===== BACKUP / IMPORT / PIN / RESET - LOCALSTORAGE =====
+function exportData(){
+  let data = { app:'DELZ PROJECT', pin:getPin(), view:view, filter:filter, projects:projects, exportedAt:new Date().toISOString() };
+  let blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  let a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'delz-project-backup.json'; a.click();
+}
+function importData(e){
+  let f = e.target.files[0]; if(!f) return;
+  let r = new FileReader();
+  r.onload = function(){ try{ let d = JSON.parse(r.result); if(d.projects){ projects = d.projects; saveProjects(); if(d.pin) localStorage.setItem(LS_PIN, d.pin); alert('Import berhasil! ' + projects.length + ' project ke-restore.'); render(); } else alert('File bukan backup DELZ PROJECT'); }catch(err){ alert('File rusak'); } };
+  r.readAsText(f);
+}
+function changePin(){
+  let baru = prompt('PIN baru (4 angka):', getPin());
+  if(!baru) return; baru = baru.trim();
+  if(baru.length < 3){ alert('PIN kependekan'); return; }
+  localStorage.setItem(LS_PIN, baru); updateStorageInfo(); alert('PIN baru kesimpen: ' + baru + '. Inget-inget!');
+}
+function resetAll(){
+  if(!confirm('HAPUS SEMUA DATA? Project + PIN ke-reset. Yakin?')) return;
+  localStorage.removeItem(LS_PROJECTS); localStorage.removeItem(LS_PIN); localStorage.removeItem(LS_VIEW); localStorage.removeItem(LS_FILTER);
+  location.reload();
+}
+function render(withLoading) {
+  if (withLoading) { document.getElementById('loading').style.display = 'block'; document.getElementById('listDoing').innerHTML = ''; document.getElementById('listRest').innerHTML = ''; setTimeout(() => { document.getElementById('loading').style.display = 'none'; doRender(); }, 600); return; }
+  doRender();
+}
+function doRender() {
+  let list = projects;
+  if (filter != 'ALL') { if (filter == 'DOING') list = list.filter(p => p.status == 'DOING'); else list = list.filter(p => p.jenis == filter); }
+  document.getElementById('nTotal').innerText = projects.length;
+  document.getElementById('nDoing').innerText = projects.filter(p => p.status == 'DOING').length;
+  document.getElementById('nDone').innerText = projects.filter(p => p.status == 'DONE').length;
+  document.getElementById('bannerSub').innerText = projects.filter(p=>p.status=='DOING').length + ' project jalan • ' + projects.length + ' total';
+  let doing = list.filter(p => p.status == 'DOING'), rest = list.filter(p => p.status != 'DOING');
+  document.getElementById('listDoing').innerHTML = doing.length ? doing.map(p => card(projects.indexOf(p), p, true)).join('') : '<div class="card">Gak ada yang lagi dibikin. Gas satu.</div>';
+  document.getElementById('listRest').innerHTML = rest.length ? rest.map(p => card(projects.indexOf(p), p, false)).join('') : '<div class="card">Antrian kosong.</div>';
+  document.getElementById('tableBody').innerHTML = list.length ? list.map(p => {
+    let idx = projects.indexOf(p);
+    let cls = p.status=='DOING' ? 'doing' : p.status=='DONE' ? 'done' : '';
+    return `<tr><td><b>${p.nama}</b><br><span style="color:#6B675E;font-size:11px">${p.note||''}</span></td><td>${p.jenis}</td><td><span class="statusPill ${cls}">${p.status}</span></td><td><span class="pbar"><i style="width:${p.prog}%"></i></span> ${p.prog}%</td><td style="white-space:nowrap">${p.status!='DONE'?`<button class="mini fill" onclick="finish(${idx})">SELESAI</button>`:''} <button class="mini" onclick="del(${idx})">HAPUS</button></td></tr>`;
+  }).join('') : '<tr><td colspan="5" style="text-align:center;padding:20px">Kosong.</td></tr>';
+  updateStorageInfo();
+}
+function card(i, p, hot) {
+  return `<div class="card ${hot ? 'hot' : ''}"><div style="display:flex;justify-content:space-between"><span class="mono" style="font-size:11px;border:1px solid #000;padding:3px 6px;background:#F2EEE3">${p.jenis} • ${p.status}</span><button class="mini" onclick="del(${i})">HAPUS</button></div><h3 style="margin:8px 0 4px">${p.nama}</h3><p style="font-size:13px;color:#6B675E">${p.note || ''}</p><div class="progress"><i style="width:${p.prog}%"></i></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="mono" style="font-size:12px;font-weight:600">${p.prog}%</span>${p.status != 'DONE' ? `<button class="mini fill" onclick="finish(${i})">SELESAI ✓</button>` : ''}</div></div>`;
+}
+</script>
+</body>
+</html>
