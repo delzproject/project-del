@@ -7,6 +7,11 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#F2EEE3">
 <meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DELZ">
+<link rel="apple-touch-icon" href="icon2.jpg">
+<link rel="icon" href="icon2.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -79,12 +84,13 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
 .storageBox{border:2px dashed #000;padding:12px;margin-top:16px;background:#FFFDF7}
 .storageBox b{font-size:13px}
 .storageBox p{font-size:11px;color:#6B675E;line-height:1.5;margin:4px 0 8px}
+#installBtn{display:none;width:100%;background:#FF4D00;color:#fff;border:2px solid #000;padding:14px;margin-top:12px;font-weight:700;box-shadow:4px 4px 0 #000;cursor:pointer}
 </style>
 </head>
 <body>
-<div id="splash"><video autoplay muted loop playsinline src="animasi.mp4"></video><button id="lewati" onclick="goLogin()">LEWATI →</button></div>
+<div id="splash"><video autoplay muted loop playsinline preload="none" src="animasi.mp4"></video><button id="lewati" onclick="goLogin()">LEWATI →</button></div>
 <div id="loginPage">
-  <video class="bgVideo" autoplay muted loop playsinline src="animasi.mp4"></video>
+  <video class="bgVideo" autoplay muted loop playsinline preload="none" src="animasi.mp4"></video>
   <div class="scrim"></div>
   <div class="loginCard">
     <div class="mono" style="font-size:11px;letter-spacing:1px">PRIVATE • KHUSUS DELZ • LOCALSTORAGE ON</div>
@@ -92,6 +98,7 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
     <p style="font-size:13px;color:#6B675E;margin-top:6px;line-height:1.5">List project lu. Kesimpen di HP lu, bukan di server. Tutup app, buka lagi tetep ada.</p>
     <input id="pin" class="input" type="tel" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" placeholder="PIN lu (6 angka)" maxlength="6">
     <button class="btn" onclick="login()">MASUK →</button>
+    <button id="installBtn" onclick="installApp()">⬇ INSTALL APP DELZ</button>
     <p class="mono" style="font-size:11px;color:#6B675E;margin-top:8px">PIN 6 angka. Bisa diganti di menu bawah.</p>
   </div>
 </div>
@@ -99,7 +106,7 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
   <div class="top"><div><b style="font-size:22px;letter-spacing:-1px">DELZ PROJECT</b><div class="mono" style="font-size:11px;color:#6B675E" id="dateTxt"></div></div><div class="mono" style="font-size:11px;border:2px solid #000;padding:6px 8px;background:#FF4D00;color:#fff">● <span id="saveDot">SAVED</span></div></div>
   <div class="banner">
     <div class="bannerTag mono">DELZ PROJECT</div>
-    <video id="bannerVideo" autoplay muted loop playsinline src="banner.mp4" onerror="document.getElementById('noBanner').style.display='grid'"></video>
+    <video id="bannerVideo" autoplay muted loop playsinline preload="none" src="banner.mp4" onerror="document.getElementById('noBanner').style.display='grid'"></video>
     <div class="noBanner" id="noBanner" style="display:none"><div>🎬 BANNER.MP4 BELUM ADA<br><small>Taro file banner.mp4 di folder yang sama</small></div></div>
     <div class="bannerBottom"><div><b>SEDANG DIPROSES HARI INI</b><br><span class="mono" id="bannerSub">0 project jalan</span></div><span class="mono">▶ LOOP</span></div>
   </div>
@@ -289,7 +296,32 @@ function doRender() {
 function card(i, p, hot) {
   return `<div class="card ${hot ? 'hot' : ''}"><div style="display:flex;justify-content:space-between"><span class="mono" style="font-size:11px;border:1px solid #000;padding:3px 6px;background:#F2EEE3">${p.jenis} • ${p.status}</span><button class="mini" onclick="del(${i})">HAPUS</button></div><h3 style="margin:8px 0 4px">${p.nama}</h3><p style="font-size:13px;color:#6B675E">${p.note || ''}</p><div class="progress"><i style="width:${p.prog}%"></i></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="mono" style="font-size:12px;font-weight:600">${p.prog}%</span>${p.status != 'DONE' ? `<button class="mini fill" onclick="finish(${i})">SELESAI ✓</button>` : ''}</div></div>`;
 }
+// --- PWA INSTALL ---
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBtn').style.display = 'block';
+});
+function installApp(){
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => { deferredPrompt = null; document.getElementById('installBtn').style.display = 'none'; });
+  } else {
+    alert('Di HP lu: pencet titik 3 di Chrome > Tambahkan ke Layar Utama / Install App');
+  }
+}
+window.addEventListener('appinstalled', () => { document.getElementById('installBtn').style.display = 'none'; });
 </script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js')}</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      // Cek update SW tiap buka
+      reg.update();
+    }).catch(err => console.log('SW gagal:', err));
+  });
+}
+</script>
 </body>
-</html>
+    </html>
