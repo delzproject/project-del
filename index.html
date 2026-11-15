@@ -99,13 +99,13 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
 </div>
 
 <div id="homePage">
-  <div class="top"><div><b style="font-size:22px;letter-spacing:-1px">DELZ•PROJECT</b><div class="mono" style="font-size:11px;color:#6B675E" id="dateTxt"></div></div><div class="mono" style="font-size:11px;border:2px solid #000;padding:6px 8px;background:#FF4D00;color:#fff">● <span id="saveDot">SAVED</span></div></div>
+  <div class="top"><div><b style="font-size:22px;letter-spacing:-1px">DELZ PROJECT</b><div class="mono" style="font-size:11px;color:#6B675E" id="dateTxt"></div></div><div class="mono" style="font-size:11px;border:2px solid #000;padding:6px 8px;background:#FF4D00;color:#fff">● <span id="saveDot">SAVED</span></div></div>
 
   <div class="banner">
     <div class="bannerTag mono">DELZ PROJECT</div>
     <video id="bannerVideo" autoplay muted loop playsinline src="banner.mp4" onerror="document.getElementById('noBanner').style.display='grid'"></video>
     <div class="noBanner" id="noBanner" style="display:none"><div>🎬 BANNER.MP4 BELUM ADA<br><small>Taro file banner.mp4 di folder yang sama</small></div></div>
-    <div class="bannerBottom"><div><b>SEDANG DIBIKIN HARI INI</b><br><span class="mono" id="bannerSub">0 project jalan</span></div><span class="mono">▶ LOOP</span></div>
+    <div class="bannerBottom"><div><b>SEDANG DIPROSES HARI INI</b><br><span class="mono" id="bannerSub">0 project jalan</span></div><span class="mono">▶ LOOP</span></div>
   </div>
 
   <div class="stats">
@@ -118,7 +118,7 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
     <button class="chip" data-filter="ALL" onclick="setFilter('ALL',this)">SEMUA</button>
     <button class="chip" data-filter="APK" onclick="setFilter('APK',this)">APK</button>
     <button class="chip" data-filter="WEB" onclick="setFilter('WEB',this)">WEB</button>
-    <button class="chip" data-filter="DOING" onclick="setFilter('DOING',this)">LAGI BIKIN</button>
+    <button class="chip" data-filter="DOING" onclick="setFilter('DOING',this)">LAGI PROSES</button>
   </div>
 
   <div class="viewToggle">
@@ -129,7 +129,7 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
   <div id="loading" style="display:none"><div class="skel"></div><div class="skel" style="margin-top:10px"></div></div>
 
   <div id="viewCard">
-    <h2 style="margin:12px 0 10px"> SEDANG <span style="color:#FF4D00">DIBIKIN</span></h2>
+    <h2 style="margin:12px 0 10px"> SEDANG <span style="color:#FF4D00">DIPROSES</span></h2>
     <div id="listDoing"></div>
     <h2 style="margin:16px 0 10px">IDE & ANTRIAN</h2>
     <div id="listRest"></div>
