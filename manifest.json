@@ -1,0 +1,16 @@
+{
+  "name": "DELZ PROJECT",
+  "short_name": "DELZ PROJECT",
+  "description": "List project Delz",
+  "id": "./index.html",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F2EEE3",
+  "theme_color": "#F2EEE3",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
