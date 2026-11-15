@@ -146,7 +146,6 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
     <p class="mono" style="font-size:11px;color:#6B675E">Geser tabel ke kanan kalo kepotong di HP.</p>
   </div>
 
-  <!-- LOCALSTORAGE BOX -->
   <div class="storageBox">
     <b>💾 LOCALSTORAGE - DATA LU AMAN DI HP</b>
     <p id="storageInfo">Menghitung...</p>
@@ -175,24 +174,20 @@ td .pbar i{display:block;height:100%;background:#FF4D00}
 </div></div>
 
 <script>
-// ===== LOCALSTORAGE - SEMUA DISINI =====
 const LS_PROJECTS = 'delz_projects';
 const LS_PIN = 'delz_pin';
 const LS_VIEW = 'delz_view';
 const LS_FILTER = 'delz_filter';
-
 function getPin(){ return localStorage.getItem(LS_PIN) || '1234'; }
 function getProjects(){ try{ return JSON.parse(localStorage.getItem(LS_PROJECTS) || '[]'); }catch(e){ return []; } }
 function saveProjects(){
   localStorage.setItem(LS_PROJECTS, JSON.stringify(projects));
-  // indikator SAVED
   let dot = document.getElementById('saveDot');
   if(dot){ dot.innerText='SAVED ✓'; setTimeout(()=>{ dot.innerText='SAVED'; }, 1200); }
   updateStorageInfo();
 }
 function saveView(){ localStorage.setItem(LS_VIEW, view); }
 function saveFilter(){ localStorage.setItem(LS_FILTER, filter); }
-
 let projects = getProjects();
 if (projects.length == 0) {
   projects = [
@@ -204,7 +199,6 @@ if (projects.length == 0) {
 }
 let filter = localStorage.getItem(LS_FILTER) || 'ALL';
 let view = localStorage.getItem(LS_VIEW) || 'CARD';
-
 function updateStorageInfo(){
   let total = JSON.stringify(localStorage).length;
   let kb = (total/1024).toFixed(1);
@@ -219,7 +213,6 @@ function login() {
     document.getElementById('homePage').style.display = 'block';
     document.getElementById('nav').style.display = 'flex';
     document.getElementById('dateTxt').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-    // balikin view & filter terakhir dari localStorage
     applySavedViewFilter();
     render(true);
   } else { p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake'); }
@@ -248,8 +241,6 @@ function addProject() {
 }
 function finish(i) { projects[i].status = 'DONE'; projects[i].prog = 100; saveProjects(); render(); }
 function del(i) { if(!confirm('Hapus project ini?')) return; projects.splice(i, 1); saveProjects(); render(); }
-
-// ===== BACKUP / IMPORT / PIN / RESET - LOCALSTORAGE =====
 function exportData(){
   let data = { app:'DELZ PROJECT', pin:getPin(), view:view, filter:filter, projects:projects, exportedAt:new Date().toISOString() };
   let blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
@@ -297,5 +288,7 @@ function card(i, p, hot) {
   return `<div class="card ${hot ? 'hot' : ''}"><div style="display:flex;justify-content:space-between"><span class="mono" style="font-size:11px;border:1px solid #000;padding:3px 6px;background:#F2EEE3">${p.jenis} • ${p.status}</span><button class="mini" onclick="del(${i})">HAPUS</button></div><h3 style="margin:8px 0 4px">${p.nama}</h3><p style="font-size:13px;color:#6B675E">${p.note || ''}</p><div class="progress"><i style="width:${p.prog}%"></i></div><div style="display:flex;justify-content:space-between;align-items:center"><span class="mono" style="font-size:12px;font-weight:600">${p.prog}%</span>${p.status != 'DONE' ? `<button class="mini fill" onclick="finish(${i})">SELESAI ✓</button>` : ''}</div></div>`;
 }
 </script>
+<!-- FIX INSTAL DOANG - JANGAN DIHAPUS -->
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js')}</script>
 </body>
-</html>
+      </html>
